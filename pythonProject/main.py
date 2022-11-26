@@ -17,7 +17,7 @@ serialInst.port = "COM4"
 serialInst.timeout = 1
 serialInst.open()
 ''' What time period in second when you want to insert de value in table '''
-CounterTemperature = 10
+CounterTemperature = 60
 counter = CounterTemperature/2
 b = 10
 
