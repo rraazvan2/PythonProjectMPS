@@ -1,0 +1,60 @@
+from datetime import datetime
+
+import serial.tools.list_ports
+import mysql.connector
+
+db = mysql.connector.connect(
+    host="localhost",
+    user="root",
+    passwd="",
+    port='3306',
+    database="Test123"
+)
+'''
+ports = serial.tools.list_ports.comports()
+'''
+serialInst = serial.Serial()
+
+'''
+portList = []
+'''
+'''
+for onePort in ports:
+    portList.append(str(onePort))
+    print(str(onePort))
+
+val = onePort #input("select port: COM")
+'''
+'''
+for x in range(0,len(portList)):
+    if portList[x].startswith("COM" + str(4)):
+        portVar = "COM4" #"COM" + str(val)
+        print(portList[x])
+'''
+'''
+print("Arduino UNO, port COM4 default")
+print("Masurarea temperaturii si umiditatii")
+'''
+serialInst.baudrate = 9600
+serialInst.port = "COM4"
+serialInst.open()
+counter = 0
+b = 2
+while True:
+    print(counter)
+    counter += 1
+    if serialInst.in_waiting:
+        packet = serialInst.readline()
+        '''
+        print(packet.decode('utf').rstrip('\n'))
+        '''
+        if counter == b:
+            mycursor = db.cursor()
+            '''
+            mycursor.execute("INSERT INTO Test (name, created, gender) VALUES (%s,%s,%s)", ("TIM", datetime.now(), "M"))
+            '''
+            mycursor.execute("INSERT INTO DHT11 (Name,TempAndUmidity) VALUES (%s, %s)", (datetime.now(), packet.decode('utf').rstrip('\n')))
+            print(packet.decode('utf').rstrip('\n'))
+            print("Datele au fost introduse in baza de date!\n")
+            db.commit()
+            counter = 0
